@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f5f4ef">
+<title>BLE LAB · 蓝牙调试台</title>
+<style>
+:root{color-scheme:light;--bg:#f5f4ef;--paper:#fffefa;--ink:#242c29;--muted:#68736b;--line:#d9ded4;--green:#236347;--accent:#d7f19a;--red:#9e3a32;--mono:"SFMono-Regular",Consolas,"Liberation Mono",monospace}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.6 "PingFang SC","Microsoft YaHei",sans-serif}main{max-width:1180px;margin:auto;padding:28px 32px 40px}header{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--ink);padding-bottom:18px}.brand{font:700 19px var(--mono);letter-spacing:-1px}.brand span{background:var(--green);color:white;padding:4px 7px;margin-right:8px}.eyebrow{font:11px var(--mono);letter-spacing:2px;color:var(--muted)}.hero{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:32px 0 24px}h1{font-size:34px;letter-spacing:-1px;line-height:1.2;margin:9px 0 12px}p{margin:8px 0;color:var(--muted)}.mark{font:80px var(--mono);color:var(--green);line-height:1;padding:0 20px}.checks{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}.badge{border:1px solid var(--line);padding:5px 10px;border-radius:4px;font-size:12px;background:var(--paper)}.badge.good{background:#e7efdf;color:var(--green);border-color:#c4d5b7}.badge.bad{color:var(--red);background:#f8e9e5;border-color:#e9c7bd}.notice{border-left:3px solid var(--green);background:#e9ede2;padding:12px 15px;margin-bottom:22px}.notice.error{border-color:var(--red);background:#f8e9e5}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.panel{border:1px solid var(--line);background:var(--paper);padding:22px;border-radius:8px;min-width:0}.panel-head{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:18px}h2{font-size:17px;margin:0}.index{font:12px var(--mono);color:var(--green);margin-right:10px}.small{font-size:12px;color:var(--muted)}label{display:block;font-weight:600;margin:14px 0 6px}.hint{font-size:12px;color:var(--muted);margin-top:5px}input,textarea,select{width:100%;font:14px/1.5 var(--mono);border:1px solid #bac4b8;border-radius:5px;background:#fff;padding:10px;color:var(--ink);min-height:42px}textarea{resize:vertical;min-height:77px}select{font-family:inherit}input:focus,textarea:focus,select:focus{outline:2px solid var(--green);outline-offset:2px}button{font:600 13px/1.4 inherit;font-family:inherit;cursor:pointer;border:1px solid #b7c1b2;background:transparent;color:var(--ink);padding:10px 14px;border-radius:5px;min-height:42px}button:hover:not(:disabled){background:#eaf0e2}button.primary{background:var(--green);color:white;border-color:var(--green)}button.primary:hover:not(:disabled){background:#164b33}button:disabled{opacity:.42;cursor:not-allowed}button:focus-visible{outline:2px solid var(--green);outline-offset:3px}.row{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}.row>*{flex:1}.row .compact{flex:0 0 auto}.status{font:12px var(--mono);padding:4px 9px;border-radius:30px;background:#edf0e9;white-space:nowrap}.status.connected{background:var(--accent);color:#28452b}.device{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);overflow-wrap:anywhere}.device strong{display:block}.uuid{font:12px/1.7 var(--mono);overflow-wrap:anywhere;color:var(--muted)}.props{display:flex;gap:5px;flex-wrap:wrap;min-height:22px;margin-top:8px}.prop{font:11px var(--mono);background:#eef1e8;padding:3px 7px;border-radius:3px}.value{margin-top:16px;background:#f0f2eb;border:1px solid var(--line);padding:12px;border-radius:5px}.value pre{white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.6 var(--mono);margin:4px 0 12px;max-height:140px;overflow:auto}.value pre:last-child{margin-bottom:0}.log-panel{margin-top:18px;padding-bottom:16px}.log-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.tools{display:flex;gap:8px}.tools button{font-size:12px;min-height:34px;padding:5px 10px}.logs{background:#202a25;color:#dce7d8;padding:14px;margin-top:14px;border-radius:5px;height:235px;overflow:auto;font:12px/1.7 var(--mono)}.log-entry{white-space:pre-wrap;overflow-wrap:anywhere;border-bottom:1px solid #344139;padding:5px 0}.log-entry.error{color:#ffb6a1}.log-entry.rx{color:#b9e58a}.log-entry .time{color:#92a995}.empty{color:#92a995}footer{display:flex;justify-content:space-between;gap:12px;margin-top:20px;font-size:11px;color:var(--muted)}details{margin-top:18px;border-top:1px solid var(--line);padding-top:12px}summary{cursor:pointer;font-size:12px;color:var(--muted)}details ul{padding-left:19px;font-size:12px;color:var(--muted)}[hidden]{display:none!important}
+@media(max-width:760px){main{padding:18px 16px 28px}.grid{grid-template-columns:1fr}.hero{padding:24px 0 18px}h1{font-size:28px}.mark{font-size:58px;padding:0 5px}.panel{padding:17px}header .eyebrow{letter-spacing:0;font-size:10px}footer{display:block}.row>*{min-width:100px}.row .compact{min-width:0}.log-panel .panel-head{margin:0}}
+</style>
+</head>
+<body>
+<main>
+<header><div class="brand"><span>↯</span> BLE LAB</div><div class="eyebrow">DEVICE CONNECTION WORKBENCH / 01</div></header>
+<section class="hero"><div><div class="eyebrow">WEB BLUETOOTH · GATT</div><h1>蓝牙连接，现场调试。</h1><p>选择设备、读写特征值、观察实时通知。所有通信均在本机完成。</p></div><div class="mark" aria-hidden="true">ᛒ</div></section>
+<div class="checks" id="checks"></div>
+<div class="notice" id="notice" role="status" aria-live="polite"></div>
+<div class="grid">
+<section class="panel">
+<div class="panel-head"><h2><span class="index">01</span>发现与连接</h2><span class="status" id="status">未连接</span></div>
+<label for="filterMode">设备筛选</label>
+<select id="filterMode"><option value="all">显示所有可选择的 BLE 设备</option><option value="name">按设备名称前缀筛选</option><option value="service">按广播 Service UUID 筛选</option></select>
+<div id="nameGroup" hidden><label for="namePrefix">设备名称前缀</label><input id="namePrefix" placeholder="例如：ESP32" autocomplete="off"></div>
+<label for="services">Service UUID（访问授权）</label>
+<textarea id="services" spellcheck="false" placeholder="例如：180f 或 battery_service&#10;自定义：xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"></textarea>
+<div class="hint">多个用逗号或换行分隔。访问自定义服务前必须在这里填入 UUID；留空时只申请电池、设备信息、心率三个标准服务。</div>
+<div class="row"><button id="choose" class="primary">选择并连接设备</button><button id="disconnect" disabled class="compact">断开</button></div>
+<div class="row"><button id="reconnect" disabled>重连当前设备</button></div>
+<div class="device"><strong id="deviceName">等待选择设备</strong><div class="uuid" id="deviceId">由浏览器显示设备选择窗口</div></div>
+<details><summary>使用条件与常见问题</summary><ul><li>使用 HTTPS 部署；电脑本机 localhost 可用于开发，手机访问电脑的普通 HTTP 局域网地址不可以。</li><li>Android Chrome 可测试；iPhone Safari 不支持 Web Bluetooth。</li><li>仅适用于 BLE GATT 设备，不能直接控制经典蓝牙 SPP 设备。</li><li>服务 UUID 与特征 UUID 不同。新增服务授权后，请重新“选择并连接设备”。</li><li>所有设备模式仍由浏览器决定可见列表，不是无限制扫描仪。按服务筛选要求设备在广播中包含该服务。</li><li>不知道设备协议时，先查看和读取；写入数据请以设备协议为准。</li></ul></details>
+</section>
+<section class="panel">
+<div class="panel-head"><h2><span class="index">02</span>服务与数据</h2><span class="small">READ / WRITE / NOTIFY</span></div>
+<div class="row" style="margin-top:0"><button id="discover" disabled>获取已授权服务</button></div>
+<label for="serviceSelect">Service</label><select id="serviceSelect" disabled><option value="">连接后获取服务</option></select>
+<label for="characteristicSelect">Characteristic</label><select id="characteristicSelect" disabled><option value="">先选择服务</option></select>
+<div class="props" id="props"></div>
+<div class="row"><button id="read" disabled>读取</button><button id="notify" disabled>订阅通知</button></div>
+<label for="writeData">写入内容</label><textarea id="writeData" spellcheck="false" placeholder="HEX 示例：01 0A FF"></textarea>
+<div class="row"><select id="encoding" aria-label="数据编码"><option value="hex">HEX 十六进制</option><option value="text">UTF-8 文本</option></select><select id="writeMode" aria-label="写入方式"><option value="response">Write with response</option><option value="without">Write without response</option></select></div>
+<div class="row"><button id="write" disabled>写入当前特征</button></div>
+<div class="value"><div class="small" id="valueLabel">最近收到的数据 · 尚无数据</div><div class="small">HEX</div><pre id="hexValue">—</pre><div class="small">UTF-8（非文本协议可能显示乱码）</div><pre id="textValue">—</pre></div>
+</section>
+</div>
+<section class="panel log-panel"><div class="log-top"><h2><span class="index">03</span>通信日志 <span class="small" id="logCount">0 条</span></h2><div class="tools"><button id="export">导出日志</button><button id="clear">清空</button></div></div><div class="logs" id="logs" role="log" aria-label="通信日志"><span class="empty">等待操作。日志最多保留 500 条，不会上传。</span></div></section>
+<footer><span>BLE LAB / 单文件 · 无依赖 · 无服务器转发</span><span>支持情况以当前浏览器与真实设备测试为准。</span></footer>
+</main>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const standardServices = ['battery_service', 'device_information', 'heart_rate'];
+const names = {'180f':'Battery Service','180a':'Device Information','180d':'Heart Rate','2a19':'Battery Level','2a29':'Manufacturer Name','2a24':'Model Number','2a37':'Heart Rate Measurement'};
+let device = null, server = null, serviceList = [], charList = [], characteristic = null, subscription = null;
+let busy = false, choosing = false, revision = 0, records = [];
+const capable = window.isSecureContext && !!navigator.bluetooth && typeof navigator.bluetooth.requestDevice === 'function';
+const connected = () => !!device?.gatt?.connected && !!server;
+function log(message, level = 'info') {
+  const now = new Date();
+  records.push({time:now.toISOString(), level, message});
+  if(records.length > 500) records.shift();
+  if($('logs').querySelector('.empty')) $('logs').replaceChildren();
+  const row = document.createElement('div'); row.className = 'log-entry ' + level;
+  const time = document.createElement('span'); time.className = 'time'; time.textContent = now.toLocaleTimeString('zh-CN',{hour12:false}) + '  ';
+  row.append(time, document.createTextNode(message)); $('logs').append(row);
+  while($('logs').children.length > 500) $('logs').firstElementChild.remove();
+  $('logs').scrollTop = $('logs').scrollHeight; $('logCount').textContent = records.length + ' 条';
+}
+function notice(message, error = false) { $('notice').textContent = message; $('notice').classList.toggle('error',error); }
+function fail(error) {
+  const hints = {NotFoundError:'未选择设备、没有匹配项，或设备未提供该服务/特征。',SecurityError:'检查 HTTPS、服务 UUID 授权以及嵌入页面的 bluetooth 权限策略。',NotAllowedError:'蓝牙授权被拒绝，请检查浏览器和系统权限。',NetworkError:'连接失败或已断开，请确认设备距离、供电及是否被其他应用占用。',NotSupportedError:'设备或浏览器不支持该操作。',InvalidStateError:'连接或特征状态已失效，请重新连接。'};
+  const message = `${error.name || 'Error'}: ${error.message || String(error)}`;
+  log(message,'error'); notice((hints[error.name] || '操作失败，请检查输入与设备状态。') + ' ' + message,true);
+}
+function sync() {
+  const online = connected(), p = characteristic?.properties;
+  $('choose').disabled = !capable || busy;
+  $('disconnect').disabled = !online || choosing;
+  $('reconnect').disabled = !capable || busy || !device || online;
+  $('discover').disabled = !online || busy;
+  $('serviceSelect').disabled = !online || busy || !serviceList.length;
+  $('characteristicSelect').disabled = !online || busy || !charList.length;
+  $('read').disabled = !online || busy || !p?.read;
+  $('notify').disabled = !online || busy || !(p?.notify || p?.indicate);
+  $('notify').textContent = subscription === characteristic && characteristic ? '取消订阅' : '订阅通知';
+  const writeAllowed = $('writeMode').value === 'response' ? p?.write : p?.writeWithoutResponse;
+  $('write').disabled = !online || busy || !writeAllowed;
+  for(const id of ['filterMode','services','namePrefix']) $(id).disabled = busy;
+  $('status').textContent = online ? '● 已连接' : busy ? '处理中…' : '未连接';
+  $('status').classList.toggle('connected',online);
+}
+async function run(action) {
+  if(busy) return;
+  busy = true; sync();
+  try { await action(); } catch(error) { fail(error); }
+  finally { busy = false; choosing = false; sync(); }
+}
+function resetSelect(id, text) { $(id).replaceChildren(new Option(text,'')); }
+function clearValue() { $('valueLabel').textContent = '最近收到的数据 · 尚无数据'; $('hexValue').textContent = '—'; $('textValue').textContent = '—'; }
+function resetGatt() {
+  revision++;
+  if(subscription) subscription.removeEventListener('characteristicvaluechanged',onValue);
+  subscription = null; characteristic = null; server = null; serviceList = []; charList = [];
+  resetSelect('serviceSelect','连接后获取服务'); resetSelect('characteristicSelect','先选择服务'); $('props').replaceChildren(); clearValue();
+}
+function onDisconnect(event) {
+  if(event.target !== device) return;
+  resetGatt(); log('设备连接已断开。','error'); notice('设备已断开，可点击“重连当前设备”。',true); sync();
+}
+function displayUuid(uuid) {
+  const match = /^0000([0-9a-f]{4})-0000-1000-8000-00805f9b34fb$/i.exec(uuid);
+  return match && names[match[1]] ? names[match[1]] + ' · ' + match[1] : uuid;
+}
+function parseService(value) {
+  let token = value.trim().toLowerCase();
+  if(/^(?:0x)?[0-9a-f]{4}$/.test(token) || /^(?:0x)?[0-9a-f]{8}$/.test(token)) token = parseInt(token.replace(/^0x/,''),16);
+  try { return BluetoothUUID.getService(token); }
+  catch { throw new Error('无效 Service UUID：' + value + '。请输入标准服务名、4/8 位十六进制或完整 128 位 UUID。'); }
+}
+function options() {
+  const entered = $('services').value.trim().split(/[,，;；\s]+/).filter(Boolean);
+  const services = [...new Set((entered.length ? entered : standardServices).map(parseService))];
+  const mode = $('filterMode').value;
+  if(mode === 'name') {
+    const prefix = $('namePrefix').value.trim();
+    if(!prefix) throw new Error('请填写设备名称前缀。');
+    return {filters:[{namePrefix:prefix}],optionalServices:services};
+  }
+  if(mode === 'service') {
+    if(!entered.length) throw new Error('按服务筛选时，请填写设备实际广播的 Service UUID。');
+    return {filters:services.map(service=>({services:[service]})),optionalServices:services};
+  }
+  return {acceptAllDevices:true,optionalServices:services};
+}
+async function connectCurrent() {
+  resetGatt(); const current = device, token = revision;
+  log('正在连接 GATT：' + (current.name || '未命名设备'));
+  const result = await current.gatt.connect();
+  if(current !== device || token !== revision || !current.gatt.connected) throw new Error('连接状态已变化，请重试。');
+  server = result;
+  log('GATT 连接成功。'); notice('设备已连接。获取已授权服务后，选择需要调试的特征。');
+  await discover();
+}
+async function discover() {
+  const token = revision; const result = await server.getPrimaryServices();
+  if(token !== revision || !connected()) return;
+  serviceList = result; charList = []; characteristic = null;
+  resetSelect('serviceSelect','请选择服务'); resetSelect('characteristicSelect','先选择服务'); $('props').replaceChildren(); clearValue();
+  serviceList.forEach((service,index)=>$('serviceSelect').add(new Option(displayUuid(service.uuid),String(index))));
+  log('获取到 ' + result.length + ' 个已授权的主服务。');
+  if(!result.length) notice('未发现已授权服务。请填入设备实际 Service UUID，然后重新选择设备。',true);
+}
+async function stopSubscription() {
+  const previous = subscription;
+  if(!previous) return;
+  await previous.stopNotifications();
+  previous.removeEventListener('characteristicvaluechanged',onValue);
+  if(subscription === previous) subscription = null;
+  log('停止通知：' + previous.uuid);
+}
+function showValue(view, source, uuid) {
+  const bytes = new Uint8Array(view.buffer,view.byteOffset,view.byteLength);
+  const hex = [...bytes].map(x=>x.toString(16).padStart(2,'0').toUpperCase()).join(' ');
+  const text = new TextDecoder().decode(bytes);
+  $('valueLabel').textContent = source + ' · ' + bytes.length + ' bytes · ' + new Date().toLocaleTimeString();
+  $('hexValue').textContent = hex || '(空数据)'; $('textValue').textContent = text || '(空数据)';
+  log(source + ' [' + uuid + '] ' + bytes.length + ' bytes\nHEX: ' + hex + '\nUTF-8: ' + text,'rx');
+}
+function onValue(event) { if(event.target === subscription && event.target.value) showValue(event.target.value,'NOTIFY',event.target.uuid); }
+$('filterMode').addEventListener('change',()=>{ $('nameGroup').hidden = $('filterMode').value !== 'name'; });
+$('choose').addEventListener('click',()=>run(async()=>{
+  const config = options();
+  choosing = true; sync();
+  // Keep requestDevice in the click's user activation: no await before this call.
+  const pending = navigator.bluetooth.requestDevice(config);
+  log('已请求设备选择器。授权服务：' + config.optionalServices.join(', '));
+  const next = await pending;
+  if(device) { device.removeEventListener('gattserverdisconnected',onDisconnect); device.gatt?.disconnect(); }
+  resetGatt(); device = next; device.addEventListener('gattserverdisconnected',onDisconnect);
+  $('deviceName').textContent = device.name || '未命名设备'; $('deviceId').textContent = '浏览器设备 ID：' + device.id;
+  log('选择设备：' + (device.name || '未命名设备'));
+  await connectCurrent();
+}));
+$('disconnect').addEventListener('click',()=>{
+  device?.gatt?.disconnect(); resetGatt(); notice('连接已断开。可重连当前设备或选择其他设备。'); sync();
+});
+$('reconnect').addEventListener('click',()=>run(connectCurrent));
+$('discover').addEventListener('click',()=>run(async()=>{ await stopSubscription(); await discover(); }));
+$('serviceSelect').addEventListener('change',()=>run(async()=>{
+  const selection = $('serviceSelect').value, token = revision;
+  await stopSubscription(); characteristic = null; charList = []; $('props').replaceChildren(); clearValue(); resetSelect('characteristicSelect','请选择特征');
+  if(selection === '') return;
+  const service = serviceList[Number(selection)];
+  if(!service || token !== revision) return;
+  const found = await service.getCharacteristics();
+  if(token !== revision || !connected()) return;
+  charList = found;
+  found.forEach((item,index)=>$('characteristicSelect').add(new Option(displayUuid(item.uuid),String(index))));
+  log('服务 ' + service.uuid + '：' + found.length + ' 个特征。');
+}));
+$('characteristicSelect').addEventListener('change',()=>run(async()=>{
+  const selection = $('characteristicSelect').value, token = revision;
+  await stopSubscription(); if(token !== revision) return;
+  characteristic = selection === '' ? null : charList[Number(selection)]; $('props').replaceChildren(); clearValue();
+  if(!characteristic) return;
+  const p = characteristic.properties;
+  for(const key of ['read','write','writeWithoutResponse','notify','indicate','broadcast','authenticatedSignedWrites','reliableWrite','writableAuxiliaries']) {
+    if(p[key]) { const tag = document.createElement('span'); tag.className='prop'; tag.textContent=key; $('props').append(tag); }
+  }
+  $('writeMode').value = p.write ? 'response' : 'without';
+  log('选中特征：' + characteristic.uuid);
+}));
+$('read').addEventListener('click',()=>run(async()=>{
+  const current = characteristic, token = revision; const value = await current.readValue();
+  if(token === revision && connected()) showValue(value,'READ',current.uuid);
+}));
+$('notify').addEventListener('click',()=>run(async()=>{
+  if(subscription) { await stopSubscription(); return; }
+  const current = characteristic, token = revision;
+  subscription = current; current.addEventListener('characteristicvaluechanged',onValue);
+  try {
+    await current.startNotifications();
+    if(token === revision && connected()) log('已订阅通知：' + current.uuid);
+    else { current.removeEventListener('characteristicvaluechanged',onValue); if(subscription === current) subscription=null; }
+  } catch(error) { current.removeEventListener('characteristicvaluechanged',onValue); if(subscription === current) subscription=null; throw error; }
+}));
+$('writeMode').addEventListener('change',sync);
+$('encoding').addEventListener('change',()=>{ $('writeData').placeholder = $('encoding').value === 'hex' ? 'HEX 示例：01 0A FF' : '输入 UTF-8 文本'; });
+function writeBytes() {
+  const raw = $('writeData').value;
+  if($('encoding').value === 'text') return new TextEncoder().encode(raw);
+  const hex = raw.replace(/\s/g,'');
+  if(!/^(?:[0-9a-fA-F]{2})*$/.test(hex)) throw new Error('HEX 必须为完整字节，例如 01 0A FF；不支持 0x 前缀。');
+  return Uint8Array.from(hex.match(/.{2}/g) || [],byte=>parseInt(byte,16));
+}
+$('write').addEventListener('click',()=>run(async()=>{
+  const bytes = writeBytes();
+  if(!bytes.length) throw new Error('请输入要写入的数据。');
+  if(bytes.length > 512) throw new Error('单次写入超过 512 字节，请按设备协议分包。');
+  const current = characteristic, token = revision, withResponse = $('writeMode').value === 'response';
+  log('TX [' + current.uuid + '] ' + bytes.length + ' bytes: ' + [...bytes].map(x=>x.toString(16).padStart(2,'0')).join(' '));
+  if(withResponse) await current.writeValueWithResponse(bytes); else await current.writeValueWithoutResponse(bytes);
+  if(token !== revision) return;
+  log(withResponse ? '写入完成，已收到 GATT 写入响应；业务执行结果以设备回报为准。' : '写入已提交（无响应模式，不代表设备确认收到）。');
+}));
+$('clear').addEventListener('click',()=>{ records=[]; $('logs').replaceChildren(); $('logCount').textContent='0 条'; });
+$('export').addEventListener('click',()=>{
+  const content = JSON.stringify({exportedAt:new Date().toISOString(),userAgent:navigator.userAgent,secureContext:window.isSecureContext,webBluetooth:!!navigator.bluetooth,device:device?{name:device.name,id:device.id}:null,records},null,2);
+  const url = URL.createObjectURL(new Blob([content],{type:'application/json'}));
+  const anchor = document.createElement('a'); anchor.href=url; anchor.download='ble-log-'+new Date().toISOString().replace(/[:.]/g,'-')+'.json'; anchor.click(); setTimeout(()=>URL.revokeObjectURL(url),10000);
+});
+for(const [title,ok] of [['安全上下文',window.isSecureContext],['Web Bluetooth',!!navigator.bluetooth && typeof navigator.bluetooth.requestDevice === 'function'],['顶层页面',window.top === window.self]]) {
+  const item = document.createElement('span'); item.className='badge '+(ok?'good':'bad'); item.textContent=(ok?'✓ ':'× ')+title; $('checks').append(item);
+}
+if(!window.isSecureContext) notice('当前不是安全上下文。请通过 HTTPS 打开此页；手机访问电脑的 HTTP 局域网 IP 无法使用 Web Bluetooth。',true);
+else if(!capable) notice('当前浏览器不提供 Web Bluetooth。iPhone Safari 不支持；请使用支持 BLE 的 Android Chrome 测试。',true);
+else notice('环境支持 Web Bluetooth。请开启手机蓝牙，按需填写服务 UUID，再点击“选择并连接设备”。');
+log('环境检测：secureContext=' + window.isSecureContext + ', Web Bluetooth=' + !!navigator.bluetooth);
+sync();
+if(navigator.bluetooth?.getAvailability) navigator.bluetooth.getAvailability().then(available=>{
+  log('浏览器报告蓝牙可用性：' + available + '（不等于设备已连接）');
+  if(!available && !connected() && !busy) notice('浏览器报告蓝牙暂不可用，请检查系统蓝牙开关、适配器和权限。仍可尝试请求设备。',true);
+}).catch(error=>log('可用性检测失败：'+error.message,'error'));
+window.addEventListener('pagehide',()=>device?.gatt?.disconnect());
+</script>
+</body>
+</html>
